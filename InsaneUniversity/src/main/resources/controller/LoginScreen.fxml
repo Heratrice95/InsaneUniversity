@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane prefHeight="400.0" prefWidth="720" styleClass="background" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+      <HBox prefHeight="400.0" prefWidth="720.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+      		<VBox prefHeight="400.0" prefWidth="224.0">
+         <children>
+         
+         
+         			<HBox prefHeight="16.0" prefWidth="200.0">
+         				<children>
+         					<Label contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="User" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
+         				</children>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+         			</HBox>
+         			<HBox fillHeight="false" prefHeight="16.0" prefWidth="200.0" spacing="10">
+                     <children>
+                        <TextField id="username" />
+                     </children>
+         			</HBox>
+                  <HBox prefHeight="16.0" prefWidth="200.0">
+                     <children>
+                        <Label contentDisplay="CENTER" maxWidth="1.7976931348623157E308" text="Passwort" textAlignment="CENTER" HBox.hgrow="ALWAYS" />
+                     </children>
+                     <padding>
+                        <Insets top="10.0" />
+                     </padding>
+                  </HBox>
+                  <HBox prefHeight="16.0" prefWidth="200.0">
+                     <children>
+                        <TextField id="password" />
+                     </children>
+                  </HBox>
+                  <HBox prefWidth="200.0">
+                     <padding>
+                        <Insets top="20.0" />
+                     </padding>
+                     <children>
+                        <Button id="signin" mnemonicParsing="false" text="Einloggen" />
+                     </children>
+                  </HBox>
+                  <HBox prefWidth="200.0">
+                     <children>
+                        <Button id="signup" mnemonicParsing="false" text="Registrieren" />
+                     </children>
+                     <padding>
+                        <Insets top="20.0" />
+                     </padding>
+                  </HBox>
+         </children>
+               <HBox.margin>
+                  <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+               </HBox.margin>
+      		</VBox>
+            <VBox alignment="BOTTOM_RIGHT" prefHeight="400.0" prefWidth="488.0">
+               <children>
+                  <Button id="leave" mnemonicParsing="false" prefHeight="32.0" prefWidth="79.0" text="Verlassen">
+                     <VBox.margin>
+                        <Insets bottom="20.0" right="20.0" />
+                     </VBox.margin>
+                  </Button>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
+	</children>
+</AnchorPane>
