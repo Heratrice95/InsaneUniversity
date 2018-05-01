@@ -38,7 +38,8 @@ public class LoginScreenController {
 	    String password = pw.getText();
 		
 		 //später je nachdem ob erfolgreich oder nicht auf dementsprechenden wert ändern.
-		if(loginhandler.login(name, password)) {
+	  //200 is http code for OK (return value of NetWorkHandler methods)
+		if(loginhandler.login(name, password)==200) {
 			enterLobby();
 		}
 		else {

@@ -8,11 +8,31 @@ import org.junit.Test;
 
 import model.gen.Player;
 import network.NetworkHandler;
+import static org.hamcrest.CoreMatchers.*;
 
 public class NetworkTest {
 
 	@Test
-	public void test() {
+	public void testLogin() {
+		NetworkHandler test = new NetworkHandler();
+		//Response should have status=200 for OK
+		assertEquals("Thor not logged in although he should be", 200, test.login("Thor", "crazy"));
+		//Response should have status=401 for Unauthorized because of wrong password
+		assertEquals("Thor logged in although he shouldn't be", 401, test.login("Thor", "wasd"));
+	}
+	
+	@Test
+	public void testCreateUser() {
+		NetworkHandler test = new NetworkHandler();
+		// Return value of createUser should be 400 for bad request (user already registered)
+		// Only testing the error case here to not flood the database with unused characters when testing
+		assertEquals("User registered although a user with the same name already exists", 400, test.createUser("Thor"));
+	}
+	
+	@Test
+	// In this test two players are checked, which should exist.
+	// If it turns red: check if the players on the server have been reseted
+	public void testGetPlayers() {
 		
 		boolean playersExist = false;
 		NetworkHandler test = new NetworkHandler();
@@ -22,25 +42,24 @@ public class NetworkTest {
 		ArrayList<String> nameList = new ArrayList<String>();
 		
 		for(int i = 0; i<playerList.size(); i++) {
-//			System.out.println(player.getName());
 			nameList.add(playerList.get(i).getName());
 		}
 		
-		if(nameList.contains("Thor")) {
+		if(nameList.contains("Thor") && nameList.contains("Jupiter")) {
 			playersExist = true;
 		}
-		assertTrue("Thor is not in the list", playersExist);
+		assertTrue("A Player who should exist is missing", playersExist);
 		
 	}
+	
 	@Test
-	public void logoutTest() {
+	public void testLogout() {
 		
-		NetworkHandler test2 = new NetworkHandler();
-		test2.login("Thor", "crazy");
-		test2.logout();
-		boolean a = test2.cookiestillactive();
-		assertFalse(a);
-		
+		NetworkHandler test = new NetworkHandler();
+		test.login("Thor", "crazy");
+		test.logout();
+		int logoutCheck = test.logout();
+		assertThat("User not logged out", logoutCheck, not(equals(200)));
 	}
 
 }

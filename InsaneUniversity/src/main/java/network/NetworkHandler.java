@@ -21,75 +21,64 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-
+//TODO: return status int (or the whole response) so the methods can be tested better
 public class NetworkHandler {
+	int responseStatus;	//Integer for the HTTP Response Status, later used for testing, initiated 
+						//as -1 at the beginning of all the methods so it is no valid response
 	private NewCookie cookie;
 	private ClientConfig config;
 	private Client client;
 	private WebTarget target;
 	
-	public boolean createUser(String username) {
-		
+	public int createUser(String username) {
+		responseStatus = -1;
 		JSONParser parser = new JSONParser();
 		JSONObject user=null;
 
 		try {
 			user = (JSONObject) parser.parse("{\"Username\":\""+ username +"\"}");
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		Response response = target.path("user").path("create").request().post(Entity.entity(user, MediaType.APPLICATION_JSON),Response.class);
+		responseStatus = response.getStatus();
+		
 		System.out.println(response.toString());
-		if(response.getStatus()==200) {
-			return true;
-		}
-		else {
-			return false;
-		}
+		
+		return responseStatus;
 	}
 	
-	public boolean login(String username, String password) {
+	public int login(String username, String password) {
+		responseStatus = -1;
 		JSONParser parser = new JSONParser();
 		JSONObject user = null;
 	
 		try {
 			user = (JSONObject) parser.parse("{\"Username\":\""+username+"\", \"Password\":\""+password+"\"}");
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		Response response = target.path("user").path("login").request()
 				.post(Entity.entity(user, MediaType.APPLICATION_JSON), Response.class);
 		
+		responseStatus = response.getStatus();
 		this.cookie = response.getCookies().get("JSESSIONID");
 		
 		System.out.println(response.toString());
-		if (response.getStatus() == 200) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-	
-	
-	public boolean logout() {
-		Response response = target.path("user").path("logout").request().cookie(this.cookie).get(Response.class);
 		
-		if(response.getStatus()==200) {
-			return true;
-		}
-		return false;
+		return responseStatus;
 	}
 	
-	public boolean cookiestillactive() {
-		Response response = target.path("user").path("info").request().cookie(this.cookie).get(Response.class);
-		if(response.getStatus()==200) {
-			return true;
-		}
-		return false;
+	// TODO Change return value to int here as well?
+	public int logout() {
+		responseStatus = -1;
+		Response response = target.path("user").path("logout").request().cookie(this.cookie).get(Response.class);
+		responseStatus = response.getStatus();
+		
+		return responseStatus;
 	}
+
 	
 	public ArrayList<Player> getPlayersFromServer(){
 		ArrayList<Player> players = new ArrayList<Player>();
@@ -102,7 +91,9 @@ public class NetworkHandler {
 
 		try {
 			JSONArray playerArray = (JSONArray) parser.parse(response);
+			//Get objects from JSONArray
 			for(Object obj:playerArray) {
+				//Cast current object to JSONObject
 				JSONObject jobj = (JSONObject) obj;
 				JSONObject prop = (JSONObject) jobj.get("prop");
 				String name = (String) prop.get("name");
@@ -115,6 +106,16 @@ public class NetworkHandler {
 		}
 		
 		return players;
+	}
+	
+	// Help method for checking if the user is (still) logged in, returns 200 if logged in
+	//TODO: is it really needed?
+	public int cookiestillactive() {
+		responseStatus = -1;
+		Response response = target.path("user").path("info").request().cookie(this.cookie).get(Response.class);
+		responseStatus = response.getStatus();
+		
+		return responseStatus;
 	}
 	
 	

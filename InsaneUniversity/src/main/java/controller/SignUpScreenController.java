@@ -29,7 +29,8 @@ public class SignUpScreenController {
 		//TODO POST request /user/create
 	    String username = name.getText();
 		signuphandler = new NetworkHandler();
-		if(signuphandler.createUser(username)) {
+		//200 is http code for OK (return value of NetWorkHandler methods)
+		if(signuphandler.createUser(username)==200) { 
 			//betritt lobby
 			openLobby = new LobbyScreenCreator();
 			openLobby.show(this.primaryStage);
