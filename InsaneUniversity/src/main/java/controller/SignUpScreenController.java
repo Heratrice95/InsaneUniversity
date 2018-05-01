@@ -1,32 +1,49 @@
 package controller;
 
 import java.io.IOException;
+
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import network.NetworkHandler;
 
 public class SignUpScreenController {
 	
 	private Stage primaryStage;
 	private LobbyScreenCreator openLobby;
+	private NetworkHandler signuphandler;
+	TextField name;
 	
+	private VBox sbox;
+	 
 	
-	public void signup(String username) {
+	public void signup() {
 		//TODO POST request /user/create
-		boolean successfull= true;
-		if(successfull) {
+	    String username = name.getText();
+		signuphandler = new NetworkHandler();
+		if(signuphandler.createUser(username)) {
 			//betritt lobby
 			openLobby = new LobbyScreenCreator();
 			openLobby.show(this.primaryStage);
 		}
 		else {
 			//gib nachricht, dass Registrierung nicht erfolgreich war.
+			
+			String errormsg = "Ungültiger Username. Versuche es erneut.";
+			ObservableList<Node> children = sbox.getChildren();
+			Label invalidcr = new Label(errormsg);
+			HBox ims = new HBox(invalidcr);
+			children.add(ims);
+			
 		}
-		
-		
 	}
 
 	public void show(Stage primaryStage) {
@@ -46,16 +63,18 @@ public class SignUpScreenController {
 	      
 	      Scene scene = new Scene(root);
 	      
-	      TextField name = (TextField) scene.lookup("#username");
-	      String username = name.getText();
+	      sbox = (VBox) scene.lookup("#signupbox");
+	      
+	      name = (TextField) scene.lookup("#username");
 	      
 	      Button signupButton = (Button) scene.lookup("#signup");
 	      
-	      signupButton.setOnAction(e -> signup(username));
+	      signupButton.setOnAction(e -> signup());
 	      
 	      Button leaveButton = (Button) scene.lookup("#leave");
 	      
 	      leaveButton.setOnAction(e -> primaryStage.close());
+	      
 	      
 	      
 	      primaryStage.setScene(scene);

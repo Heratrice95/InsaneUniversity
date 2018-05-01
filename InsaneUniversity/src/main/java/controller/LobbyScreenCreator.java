@@ -34,7 +34,6 @@ public class LobbyScreenCreator {
 
 	      primaryStage.show();
 		
-		
 	}
 
 }

@@ -2,12 +2,18 @@ package controller;
 
 import java.io.IOException;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import network.NetworkHandler;
 
 public class LoginScreenController {
 	
@@ -17,19 +23,34 @@ public class LoginScreenController {
 	
 	private SignUpScreenController signupscreenController;
 	
+	private NetworkHandler loginhandler;
 	
+	private VBox lbox;
+	private TextField username;
+	private TextField pw;
+	private boolean loginErrorMsg = false; 
 	
-	
-	
-	private void checklogin(String uname, String pw) {
+	private void checklogin() {
 		//TODO POST request /user/login
 		
-		boolean loginsuccessfull = true; //später je nachdem ob erfolgreich oder nicht auf dementsprechenden wert ändern.
-		if(loginsuccessfull) {
+		loginhandler = new NetworkHandler();
+		String name = username.getText();
+	    String password = pw.getText();
+		
+		 //später je nachdem ob erfolgreich oder nicht auf dementsprechenden wert ändern.
+		if(loginhandler.login(name, password)) {
 			enterLobby();
 		}
 		else {
 			//gib fehler login aus
+			if(!loginErrorMsg) {
+			String errormsg = "Ungültige Logindaten. Versuche es erneut.";
+			ObservableList<Node> children = lbox.getChildren();
+			Label invalidcr = new Label(errormsg);
+			HBox ims = new HBox(invalidcr);
+			children.add(ims);
+			loginErrorMsg=true;
+			}
 		}
 	}
 	
@@ -37,11 +58,9 @@ public class LoginScreenController {
 		//TODO
 		openLobby = new LobbyScreenCreator();
 		openLobby.show(this.primaryStage);
-		
 	}
 	
 	
-
 	public void show(Stage primaryStage) {
 		// TODO Auto-generated method stub
 		this.primaryStage = primaryStage;
@@ -58,15 +77,13 @@ public class LoginScreenController {
 	      
 	      Scene scene = new Scene(root);
 	      
-	      TextField username = (TextField) scene.lookup("#username");
-	      TextField pw = (TextField) scene.lookup("#password");
+	      username = (TextField) scene.lookup("#username");
+	      pw = (TextField) scene.lookup("#password");
+	      lbox = (VBox) scene.lookup("#loginbox");
 	      
 	      Button signinButton = (Button) scene.lookup("#signin");
-	      
-	      String name = username.getText();
-	      String password = pw.getText();
 
-	      signinButton.setOnAction(e -> checklogin(name, password));
+	      signinButton.setOnAction(e -> checklogin());
 	      
 	      Button signupButton = (Button) scene.lookup("#signup");
 	      
