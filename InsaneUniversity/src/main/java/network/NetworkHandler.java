@@ -30,7 +30,7 @@ public class NetworkHandler {
 	private Player currentPlayer;
 	
 	public int createUser(String username) {
-		//Integer for the HTTP Response Status, later used for testing, always initiated 
+		//Integer for the HTTP Response Status, later used for testing, always initiated
 		//as -1 at the beginning of all the methods so it is no valid response
 		int responseStatus = -1;
 		JSONParser parser = new JSONParser();
@@ -43,8 +43,6 @@ public class NetworkHandler {
 		}
 		Response response = target.path("user").path("create").request().post(Entity.entity(user, MediaType.APPLICATION_JSON),Response.class);
 		responseStatus = response.getStatus();
-		
-		System.out.println(response.toString());
 		
 		return responseStatus;
 	}
@@ -66,7 +64,6 @@ public class NetworkHandler {
 		responseStatus = response.getStatus();
 		this.cookie = response.getCookies().get("JSESSIONID");
 		
-		System.out.println(response.toString());
 		this.currentPlayer = new Player().withName(username);
 		
 		return responseStatus;
@@ -76,7 +73,6 @@ public class NetworkHandler {
 		int responseStatus = -1;
 		
 		Response response = target.path("user").path("info").request().cookie(this.cookie).get(Response.class);
-		System.out.println(response);
 		responseStatus = response.getStatus();
 		
 		return responseStatus;

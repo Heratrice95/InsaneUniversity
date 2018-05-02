@@ -58,17 +58,10 @@ public class NetworkTest {
 			nameList.add(playerList.get(i).getName());
 		}
 		
-		if(nameList.contains("Thor")) { //&& nameList.contains("Jupiter")
+		if(nameList.contains("Thor") && nameList.contains("Odin")) { //&& nameList.contains("Jupiter")
 			playersExist = true;
 		}
-//		assertTrue("A Player who should exist is missing", playersExist);
-		
-
-		
-		for( Player a : playerList) {
-			System.out.println(a.getName());
-		}
-		
+		assertTrue("A Player who should exist is missing", playersExist);
 	}
 	
 	@Test
@@ -96,11 +89,14 @@ public class NetworkTest {
 		NetworkHandler test = new NetworkHandler();
 		test.login("Thor", "crazy");
 		
-		ArrayList<Game> testlist = test.getGamesFromServer();
+		ArrayList<Game> testGames = test.getGamesFromServer();
+		ArrayList<String> testNames = new ArrayList<String>();
 		
-		for( Game a : testlist) {
-			System.out.println(a.getName());
+		for( Game game : testGames) {
+			testNames.add(game.getName());
 		}
+		
+		assertTrue("Example Game not found", testNames.contains("Example Game"));
 		
 	}
 
