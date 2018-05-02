@@ -6,6 +6,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import model.gen.Game;
 import model.gen.Player;
 
 import java.net.URI;
@@ -21,17 +22,16 @@ import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
-//TODO: return status int (or the whole response) so the methods can be tested better
 public class NetworkHandler {
-	int responseStatus;	//Integer for the HTTP Response Status, later used for testing, initiated 
-						//as -1 at the beginning of all the methods so it is no valid response
 	private NewCookie cookie;
 	private ClientConfig config;
 	private Client client;
 	private WebTarget target;
 	
 	public int createUser(String username) {
-		responseStatus = -1;
+		//Integer for the HTTP Response Status, later used for testing, always initiated 
+		//as -1 at the beginning of all the methods so it is no valid response
+		int responseStatus = -1;
 		JSONParser parser = new JSONParser();
 		JSONObject user=null;
 
@@ -49,7 +49,7 @@ public class NetworkHandler {
 	}
 	
 	public int login(String username, String password) {
-		responseStatus = -1;
+		int responseStatus = -1;
 		JSONParser parser = new JSONParser();
 		JSONObject user = null;
 	
@@ -70,13 +70,75 @@ public class NetworkHandler {
 		return responseStatus;
 	}
 	
-	// TODO Change return value to int here as well?
+	public int getUserStatus() {
+		int responseStatus = -1;
+		
+		Response response = target.path("user").path("info").request().cookie(this.cookie).get(Response.class);
+		System.out.println(response);
+		responseStatus = response.getStatus();
+		
+		return responseStatus;
+	}
+	
+	public int createGame(String gamename) {
+		int responseStatus = -1;
+//		Not JSON Stuff not needed here
+		ArrayList<Game> checkList = this.getGamesFromServer();
+		
+		for(Game check : checkList) {
+			if(check.getName().equals(gamename)) {
+				// Return 400 for bad request because a game with this name already exists
+				return 400; 
+			}
+		}
+		
+		JSONObject game = new JSONObject();
+		game.put("name", gamename);
+		
+		// Is it right to create it as header (org.apache.http.header)?
+		Response response = target.path("api").path("games").path("create").request().cookie(this.cookie).header("name", gamename).post(Entity.entity(game, MediaType.APPLICATION_JSON), Response.class);
+							
+		
+		responseStatus = response.getStatus();
+		
+		return responseStatus;
+	}
+	
 	public int logout() {
-		responseStatus = -1;
+		int responseStatus = -1;
 		Response response = target.path("user").path("logout").request().cookie(this.cookie).get(Response.class);
 		responseStatus = response.getStatus();
 		
 		return responseStatus;
+	}
+	
+	public ArrayList<Game> getGamesFromServer(){
+		ArrayList<Game> games = new ArrayList<Game>();
+		JSONParser parser = new JSONParser();
+		JSONObject game=new JSONObject();
+
+		String response = target.path("api").path("games").
+							request().
+							cookie(cookie).accept(MediaType.APPLICATION_JSON).get(String.class);
+		
+		try {
+			JSONArray gamesArray = (JSONArray) parser.parse(response);
+			//Get objects from JSONArray
+			for(Object obj:gamesArray) {
+				//Cast current object to JSONObject
+				JSONObject jobj = (JSONObject) obj;
+				JSONObject prop = (JSONObject) jobj.get("prop");
+				String name = (String) prop.get("name");
+				//String session = (String) prop.get("session"); //evtl. später benötigt
+				games.add(new Game().withName(name));
+			}
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		return games;
 	}
 
 	
@@ -109,9 +171,9 @@ public class NetworkHandler {
 	}
 	
 	// Help method for checking if the user is (still) logged in, returns 200 if logged in
-	//TODO: is it really needed?
+	//TODO: is it really needed? Could maybe be removed
 	public int cookiestillactive() {
-		responseStatus = -1;
+		int responseStatus = -1;
 		Response response = target.path("user").path("info").request().cookie(this.cookie).get(Response.class);
 		responseStatus = response.getStatus();
 		
