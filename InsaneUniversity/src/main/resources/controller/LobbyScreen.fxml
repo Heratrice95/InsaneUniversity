@@ -101,7 +101,8 @@
                   </VBox>
                </children>
             </HBox>
-            <HBox prefHeight="45.0" prefWidth="650.0" />
+            <HBox fx:id="currentplayer" prefHeight="45.0" prefWidth="650.0">
+            </HBox>
          </children>
       </VBox>
    </children>

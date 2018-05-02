@@ -18,11 +18,16 @@ import network.NetworkHandler;
 public class SignUpScreenController {
 	
 	private Stage primaryStage;
-	private LobbyScreenCreator openLobby;
 	private NetworkHandler signuphandler;
 	TextField name;
 	
 	private VBox sbox;
+
+	private LoginScreenController loginScreen;
+
+	SignUpScreenController(LoginScreenController loginsc){
+		this.loginScreen=loginsc;
+	}
 	 
 	
 	public void signup() {
@@ -31,9 +36,9 @@ public class SignUpScreenController {
 		signuphandler = new NetworkHandler();
 		//200 is http code for OK (return value of NetWorkHandler methods)
 		if(signuphandler.createUser(username)==200) { 
-			//betritt lobby
-			openLobby = new LobbyScreenCreator(signuphandler);
-			openLobby.show(this.primaryStage);
+			//geh zurückt zum Login
+			loginScreen.show(this.primaryStage);
+
 		}
 		else {
 			//gib nachricht, dass Registrierung nicht erfolgreich war.

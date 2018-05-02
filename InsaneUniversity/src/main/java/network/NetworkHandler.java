@@ -27,6 +27,7 @@ public class NetworkHandler {
 	private ClientConfig config;
 	private Client client;
 	private WebTarget target;
+	private Player currentPlayer;
 	
 	public int createUser(String username) {
 		//Integer for the HTTP Response Status, later used for testing, always initiated 
@@ -66,6 +67,7 @@ public class NetworkHandler {
 		this.cookie = response.getCookies().get("JSESSIONID");
 		
 		System.out.println(response.toString());
+		this.currentPlayer = new Player().withName(username);
 		
 		return responseStatus;
 	}
@@ -191,6 +193,10 @@ public class NetworkHandler {
 		this.client = ClientBuilder.newClient(config);
 		
 		this.target = this.client.target(getBaseURI());
+	}
+
+	public Player getCurrentPlayer(){
+		return this.currentPlayer;
 	}
 
 }

@@ -106,7 +106,7 @@ public class LoginScreenController {
 	private void opensignupwindow() {
 		// TODO Auto-generated method stub
 		
-		signupscreenController = new SignUpScreenController();
+		signupscreenController = new SignUpScreenController(this);
 		signupscreenController.show(this.primaryStage);
 		
 	}
