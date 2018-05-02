@@ -32,7 +32,7 @@ public class SignUpScreenController {
 		//200 is http code for OK (return value of NetWorkHandler methods)
 		if(signuphandler.createUser(username)==200) { 
 			//betritt lobby
-			openLobby = new LobbyScreenCreator();
+			openLobby = new LobbyScreenCreator(signuphandler);
 			openLobby.show(this.primaryStage);
 		}
 		else {
@@ -43,7 +43,6 @@ public class SignUpScreenController {
 			Label invalidcr = new Label(errormsg);
 			HBox ims = new HBox(invalidcr);
 			children.add(ims);
-			
 		}
 	}
 

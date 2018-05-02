@@ -57,7 +57,7 @@ public class LoginScreenController {
 	
 	private void enterLobby() {
 		//TODO
-		openLobby = new LobbyScreenCreator();
+		openLobby = new LobbyScreenCreator(loginhandler);
 		openLobby.show(this.primaryStage);
 	}
 	
