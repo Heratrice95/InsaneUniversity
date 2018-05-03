@@ -14,26 +14,29 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.gen.Game;
+import model.gen.Lobby;
 import model.gen.Player;
 import network.NetworkHandler;
 
 
 public class LobbyScreenCreator {
-
+	
+	//Attribute
 	private NetworkHandler handleData;
-
 	private VBox gamebox;
 	private VBox playerbox;
-
-
+	private Lobby lobby;
 	private Stage primaryStage;
 
+	//Konstruktor
 	LobbyScreenCreator(NetworkHandler handler){
 
+		this.lobby = new Lobby();
 		this.handleData=handler;
 	}
 
 
+	//Lade alle Spiele in die SpielBox
 	public void loadGames(){
 
         ArrayList<Game> games = handleData.getGamesFromServer();
@@ -46,6 +49,7 @@ public class LobbyScreenCreator {
         }
 	}
 
+	//Lade Spieler in die SpielerBox
 	public void loadPlayers(){
 
 		ArrayList<Player> players = handleData.getPlayersFromServer();
@@ -57,12 +61,14 @@ public class LobbyScreenCreator {
 			children.add(h1);
 		}
 	}
-
+	
+	//erstelle neues Spiel
 	public void createGame(String game){
-
+		//TODO zu implementieren
 
     }
 
+	//logge den eingeloggten User aus
     public void logout(){
 
 	    handleData.logout();
@@ -72,16 +78,14 @@ public class LobbyScreenCreator {
         loginScreenController.show(primaryStage);
     }
 
-
+    //lade GUI Elemente
 	public void show(Stage primaryStage) {
-		// TODO Auto-generated method stub
 		
 		this.primaryStage = primaryStage;
 	      AnchorPane root = null;
 	      try
 	      {
 	         root = FXMLLoader.load(getClass().getResource("LobbyScreen.fxml"));
-
 	      }
 	      catch (IOException e)
 	      {
@@ -102,10 +106,7 @@ public class LobbyScreenCreator {
 	      loadPlayers();
 	      loadGames();
 
-
-		
 	      primaryStage.setScene(scene);
-
 	      primaryStage.show();
 		
 	}

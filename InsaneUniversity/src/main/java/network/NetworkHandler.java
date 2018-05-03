@@ -23,12 +23,15 @@ import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriBuilder;
 
 public class NetworkHandler {
+	
+	//Attribute
 	private NewCookie cookie;
 	private ClientConfig config;
 	private Client client;
 	private WebTarget target;
 	private Player currentPlayer;
 	
+	//erstelle Spieler auf dem Server
 	public int createUser(String username) {
 		//Integer for the HTTP Response Status, later used for testing, always initiated
 		//as -1 at the beginning of all the methods so it is no valid response
@@ -47,6 +50,7 @@ public class NetworkHandler {
 		return responseStatus;
 	}
 	
+	//logge Spieler auf dem Server ein
 	public int login(String username, String password) {
 		int responseStatus = -1;
 		JSONParser parser = new JSONParser();
@@ -69,6 +73,7 @@ public class NetworkHandler {
 		return responseStatus;
 	}
 	
+	//user data from logged in user
 	public int getUserStatus() {
 		int responseStatus = -1;
 		
@@ -78,6 +83,7 @@ public class NetworkHandler {
 		return responseStatus;
 	}
 	
+	//create new game on server
 	public int createGame(String gamename) {
 		int responseStatus = -1;
 //		Not JSON Stuff not needed here
@@ -96,12 +102,12 @@ public class NetworkHandler {
 		// Is it right to create it as header (org.apache.http.header)?
 		Response response = target.path("api").path("games").path("create").request().cookie(this.cookie).header("name", gamename).post(Entity.entity(game, MediaType.APPLICATION_JSON), Response.class);
 							
-		
 		responseStatus = response.getStatus();
 		
 		return responseStatus;
 	}
 	
+	//logge den Spieler aus
 	public int logout() {
 		int responseStatus = -1;
 		Response response = target.path("user").path("logout").request().cookie(this.cookie).get(Response.class);
@@ -110,6 +116,7 @@ public class NetworkHandler {
 		return responseStatus;
 	}
 	
+	//Request von der Spielliste
 	public ArrayList<Game> getGamesFromServer(){
 		ArrayList<Game> games = new ArrayList<Game>();
 		JSONParser parser = new JSONParser();
@@ -139,19 +146,7 @@ public class NetworkHandler {
 		return games;
 	}
 
-	public int deleteAll() {
-		
-		JSONObject test = new JSONObject();
-		
-		Response response = target.path("api").path("players").request().cookie(this.cookie).post(Entity.entity(test,MediaType.APPLICATION_JSON),Response.class);
-		return response.getStatus();
-	}
-	
-	public int deletePlayer(String playername) {
-		
-		return 0;
-	}
-	
+
 	public ArrayList<Player> getPlayersFromServer(){
 		ArrayList<Player> players = new ArrayList<Player>();
 		JSONParser parser = new JSONParser();
@@ -180,6 +175,7 @@ public class NetworkHandler {
 		return players;
 	}
 	
+	
 	// Help method for checking if the user is (still) logged in, returns 200 if logged in
 	//TODO: is it really needed? Could maybe be removed
 	public int cookiestillactive() {
@@ -195,6 +191,7 @@ public class NetworkHandler {
 		return UriBuilder.fromUri("http://avocado.uniks.de:33000").build();
 	}
 	
+	//Constructor
 	public NetworkHandler(){
 		this.config = new ClientConfig();
 		
@@ -203,6 +200,7 @@ public class NetworkHandler {
 		this.target = this.client.target(getBaseURI());
 	}
 
+	//Getter, Setter
 	public Player getCurrentPlayer(){
 		return this.currentPlayer;
 	}

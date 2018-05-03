@@ -17,22 +17,18 @@ import network.NetworkHandler;
 
 public class LoginScreenController {
 	
+	//Attribute
 	private Stage primaryStage;
-	
 	private LobbyScreenCreator openLobby;
-	
 	private SignUpScreenController signupscreenController;
-	
 	private NetworkHandler loginhandler;
-	
 	private VBox lbox;
 	private TextField username;
 	private TextField pw;
 	private boolean loginErrorMsg = false; 
 	
+	//login Methode
 	private void checklogin() {
-		//TODO POST request /user/login
-		
 		loginhandler = new NetworkHandler();
 		String name = username.getText();
 	    String password = pw.getText();
@@ -55,13 +51,14 @@ public class LoginScreenController {
 		}
 	}
 	
+	//betritt Lobby
 	private void enterLobby() {
 		//TODO
 		openLobby = new LobbyScreenCreator(loginhandler);
 		openLobby.show(this.primaryStage);
 	}
 	
-	
+	//GUI von der vom Login Fenster
 	public void show(Stage primaryStage) {
 		// TODO Auto-generated method stub
 		this.primaryStage = primaryStage;
@@ -94,18 +91,12 @@ public class LoginScreenController {
 	      
 	      leaveButton.setOnAction(e -> primaryStage.close());
 	      
-	      
-	      
-	      
 	      primaryStage.setScene(scene);
-
 	      primaryStage.show();
-		
 	}
 
 	private void opensignupwindow() {
 		// TODO Auto-generated method stub
-		
 		signupscreenController = new SignUpScreenController(this);
 		signupscreenController.show(this.primaryStage);
 		

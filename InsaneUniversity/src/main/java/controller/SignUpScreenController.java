@@ -17,31 +17,31 @@ import network.NetworkHandler;
 
 public class SignUpScreenController {
 	
+	//attributes
 	private Stage primaryStage;
 	private NetworkHandler signuphandler;
-	TextField name;
-	
+	private TextField name;
 	private VBox sbox;
-
 	private LoginScreenController loginScreen;
-
+	
+	
+	//Konstruktor
 	SignUpScreenController(LoginScreenController loginsc){
 		this.loginScreen=loginsc;
 	}
 	 
-	
+	//wird vom SignUp Button gerufen. Wenn sich der User erfolgreich registriert, wird der 
+	//200 is http code for OK (return value of NetWorkHandler methods)
 	public void signup() {
-		//TODO POST request /user/create
+		
 	    String username = name.getText();
 		signuphandler = new NetworkHandler();
-		//200 is http code for OK (return value of NetWorkHandler methods)
+		
 		if(signuphandler.createUser(username)==200) { 
-			//geh zurückt zum Login
 			loginScreen.show(this.primaryStage);
-
 		}
 		else {
-			//gib nachricht, dass Registrierung nicht erfolgreich war.
+			//gib Nachricht, dass Registrierung nicht erfolgreich war.
 			
 			String errormsg = "Ungültiger Username. Versuche es erneut.";
 			ObservableList<Node> children = sbox.getChildren();
@@ -51,6 +51,8 @@ public class SignUpScreenController {
 		}
 	}
 
+	
+	//Gui Methode hier werden die Gui Elemente geladen
 	public void show(Stage primaryStage) {
 		// TODO Auto-generated method stub
 		
@@ -80,13 +82,8 @@ public class SignUpScreenController {
 	      
 	      leaveButton.setOnAction(e -> primaryStage.close());
 	      
-	      
-	      
 	      primaryStage.setScene(scene);
-
 	      primaryStage.show();
 		
 	}
-	
-
 }
