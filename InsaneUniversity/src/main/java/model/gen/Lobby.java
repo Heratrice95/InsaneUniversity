@@ -7,6 +7,7 @@ import model.gen.Lobby;
 import model.gen.Message;
 import model.gen.Player;
 import model.gen.util.GameSet;
+import model.gen.util.PlayerSet;
 
 
 public class Lobby
@@ -157,6 +158,52 @@ public class Lobby
    {
       Account value = new Account();
       withAccount(value);
+      return value;
+   }
+
+   public static final String PROPERTY_PLAYERS = "players";
+
+   private PlayerSet players = null;
+
+   public PlayerSet getPlayers()
+   {
+      return this.players;
+   }
+
+   public Lobby withPlayers(Player... value)
+   {
+      if (value == null) {
+         return this;
+      }
+      for (Player item : value) {
+         if (item != null) {
+            if (this.players == null) {
+               this.players = new PlayerSet();
+            }
+            boolean changed = this.players.add(item);
+            if (changed)
+            {
+               firePropertyChange(PROPERTY_PLAYERS, null, item);
+            }
+         }
+      }
+      return this;
+   }
+
+   public Lobby withoutPlayers(Player... value)
+   {
+      for (Player item : value) {
+         if (this.players != null && item != null) {
+            this.players.remove(item);
+         }
+      }
+      return this;
+   }
+
+   public Player createPlayers()
+   {
+      Player value = new Player();
+      withPlayers(value);
       return value;
    }
 }

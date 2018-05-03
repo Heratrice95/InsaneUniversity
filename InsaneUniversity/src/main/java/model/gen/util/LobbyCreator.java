@@ -3,6 +3,7 @@ import de.uniks.networkparser.interfaces.SendableEntityCreator;
 import model.gen.Lobby;
 import model.gen.Game;
 import model.gen.Account;
+import model.gen.Player;
 
 
 public class LobbyCreator implements SendableEntityCreator
@@ -13,6 +14,7 @@ public class LobbyCreator implements SendableEntityCreator
       Lobby.PROPERTY_GAMES,
       Lobby.PROPERTY_ACCOUNT,
       Lobby.PROPERTY_NAME,
+      Lobby.PROPERTY_PLAYERS,
    };
 
    @Override
@@ -56,6 +58,11 @@ public class LobbyCreator implements SendableEntityCreator
          return ((Lobby) entity).getName();
       }
 
+      if (Lobby.PROPERTY_PLAYERS.equalsIgnoreCase(attrName))
+      {
+         return ((Lobby) entity).getPlayers();
+      }
+
       return null;
    }
 
@@ -82,6 +89,12 @@ public class LobbyCreator implements SendableEntityCreator
       if (Lobby.PROPERTY_NAME.equalsIgnoreCase(attribute))
       {
          ((Lobby) entity).setName((String) value);
+         return true;
+      }
+
+      if (Lobby.PROPERTY_PLAYERS.equalsIgnoreCase(attribute))
+      {
+         ((Lobby) entity).withPlayers((Player) value);
          return true;
       }
 

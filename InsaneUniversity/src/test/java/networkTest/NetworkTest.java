@@ -99,5 +99,17 @@ public class NetworkTest {
 		assertTrue("Example Game not found", testNames.contains("Example Game"));
 		
 	}
+	
+	@Test
+	public void testDelete() {
+		
+		NetworkHandler test = new NetworkHandler();
+		//Response should have status=200 for OK
+		//assertEquals("Thor not logged in although he should be", 200, test.login("Alf", "crazy"));
+		test.login("Alex", "crazy");
+		System.out.println("Delete: " + test.deleteAll());
+		
+		
+	}
 
 }

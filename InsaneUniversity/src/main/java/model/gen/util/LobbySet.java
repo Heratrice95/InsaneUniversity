@@ -7,6 +7,7 @@ import de.uniks.networkparser.list.ObjectSet;
 import java.util.Collections;
 import model.gen.Game;
 import model.gen.Account;
+import model.gen.Player;
 
 public class LobbySet extends SimpleSet<Lobby>
 {
@@ -169,6 +170,46 @@ public class LobbySet extends SimpleSet<Lobby>
       for (Lobby obj : this)
       {
          obj.withAccount(value);
+      }
+      return this;
+   }
+   public LobbySet getPlayers()
+   {
+      LobbySet result = new LobbySet();
+      for (Lobby obj : this)
+      {
+         result.with(obj.getPlayers());
+      }
+      return result;
+   }
+
+   public LobbySet filterPlayers(Object value)
+   {
+      ObjectSet neighbors = new ObjectSet();
+      if (value instanceof Collection)
+      {
+         neighbors.addAll((Collection<?>) value);
+      }
+      else
+      {
+         neighbors.add(value);
+      }
+      LobbySet answer = new LobbySet();
+      for (Lobby obj : this)
+      {
+         if (! Collections.disjoint(neighbors, obj.getPlayers()))
+         {
+            answer.add(obj);
+         }
+      }
+      return answer;
+   }
+
+   public LobbySet withPlayers(Player value)
+   {
+      for (Lobby obj : this)
+      {
+         obj.withPlayers(value);
       }
       return this;
    }

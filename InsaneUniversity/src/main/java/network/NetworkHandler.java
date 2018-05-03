@@ -139,11 +139,23 @@ public class NetworkHandler {
 		return games;
 	}
 
+	public int deleteAll() {
+		
+		JSONObject test = new JSONObject();
+		
+		Response response = target.path("api").path("players").request().cookie(this.cookie).post(Entity.entity(test,MediaType.APPLICATION_JSON),Response.class);
+		return response.getStatus();
+	}
+	
+	public int deletePlayer(String playername) {
+		
+		return 0;
+	}
 	
 	public ArrayList<Player> getPlayersFromServer(){
 		ArrayList<Player> players = new ArrayList<Player>();
 		JSONParser parser = new JSONParser();
-		JSONObject user=null;
+		JSONObject user= new JSONObject();
 
 		String response = target.path("api").path("players").
 							request().

@@ -29,6 +29,7 @@ public class ModelGen {
 		account.withBidirectional(lobby, "lobby", Cardinality.ONE, "account", Cardinality.ONE);
 		player.withBidirectional(account, "account", Cardinality.ONE, "player", Cardinality.ONE);
 		message.withBidirectional(player, "player", Cardinality.ONE,"messages", Cardinality.MANY);
+		lobby.withUniDirectional(player, "players", Cardinality.MANY);
 		
 		//Attributes
 		player.withAttribute("name", DataType.STRING);
